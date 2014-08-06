@@ -1,0 +1,35 @@
+.joystick {
+                margin:10px;
+	            position: relative;
+                float:left;
+	            width: 95%;
+	            height: 95%;
+	            background-color: #eee;
+            }
+            
+
+            #cross-vertical {
+                position: absolute;
+                left: 50%;
+                width: 2px;
+                height: 100%;
+                background: #00e;
+            }
+
+            #cross-horizontal {
+                position: absolute;
+                top: 50%;   
+                width: 100%;
+                height: 2px;
+                background: #00e;
+            }
+
+       
+            .joystick .handle {
+	            position: absolute;
+	            width: 24px;
+	            height: 24px;
+	            background-color: rgb(201, 44, 44);
+	            border: 1px solid rgb(107, 35, 35);
+	            border-radius: 5px;
+            }

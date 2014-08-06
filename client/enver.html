@@ -1,0 +1,62 @@
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>RPiCar</title>
+    <script src="jquery-2.1.1.min.js"></script>
+    <script src="jquery.joystick.js"></script>
+    
+    <link href="arifStyle.css" type="text/css" rel="stylesheet" />
+    <link href="enverStyle.css" type="text/css" rel="stylesheet" />
+    
+
+    <script src="http://192.168.2.6:8085/socket.io/socket.io.js"></script>
+    <script src="enver.tasarim.js"></script>
+</head>
+
+<body>
+
+    <div id="endis">
+        <div id="aciklamalar">
+            <div id="content">LeftThrottle value: <span id="leftThrottleValue"></span></div>
+            <div id="content">RightThrottle value: <span id="rightThrottleValue"></span></div>
+            <div id="content">YawServo value: <span id="yawServoValue"></span> PitchServo value: <span id="pitchServoValue"></span></div>
+        </div>
+        <div id="butonlar">
+            butonlar
+        </div>
+
+
+        <div id="sol">
+            <div class="joystick" id="leftThrottle">
+                <div id="cross-horizontal"></div>
+                <div class="cross"></div><div class="handle"></div>
+            </div>
+        </div>
+
+        <div id="orta">
+            <div id="ortaust">
+                <img height="100%" src="http://192.168.2.6:8080/?action=stream" />
+            </div>
+            <div id="ortaalt">
+                <div class="joystick" id="camServo">
+                    <div id="cross-vertical"></div>
+                    <div id="cross-horizontal"></div>
+                    <div class="handle"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="sag">
+            <div class="joystick" id="rightThrottle">
+                <div id="cross-horizontal"></div>
+                <div class="handle"></div>
+            </div>
+        </div>
+        <div style="clear:both"></div>
+
+    </div>
+
+</body>
+</html>

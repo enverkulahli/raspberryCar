@@ -1,0 +1,40 @@
+*{
+        padding:0px;
+        margin:0px;	
+        }
+        #endis{
+        width:95%;
+        background-color:#0C6;	
+        margin:0 auto;
+        }
+        #aciklamalar{
+        height:70px;
+        background-color:#09F;
+	
+        }
+        #butonlar{
+        height:50px;	
+        background-color:#F99;
+        }
+        #sol{
+        float:left;
+        width:30%;
+        background-color:#999;	
+        }
+        #orta{
+        float:left;
+        width:40%;
+        background-color:#99C;
+        }
+        #ortaust{
+        background-color:#96F;
+        text-align:center;
+        }
+        #ortaalt{
+        background-color:#0C3;	
+        }
+        #sag{
+        float:left;
+        width:30%;	
+        background-color:#CCF;
+        }
