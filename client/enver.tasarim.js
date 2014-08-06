@@ -103,7 +103,16 @@ var oncekiRightThrottle=0.5;
 
 	            });
 
-            });
+        //kamera ac/kapat sonrasında butondan yapılacak
+        try {
+            socket.emit('camStatus', 'open');
+            //socket.emit('camStatus', 'close');
+        } catch (error) {
+            console.log(error);
+        }
+
+
+});
 
 
 

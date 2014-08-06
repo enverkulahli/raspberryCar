@@ -115,12 +115,26 @@ io.sockets.on('connection', function (socket) {
         //data işlenip 60-240 arasına çevrilecek
         var sonuc = (servoBuyuk - servoKucuk) * data + servoKucuk;
         command= 'echo 0=' + sonuc + ' > /dev/servoblaster';
-            calistir(command);
+        calistir(command);
     });
     socket.on('pitchServo', function (data) {
         var sonuc = (servoBuyuk - servoKucuk) * data + servoKucuk;
         command = 'echo 1=' + sonuc + ' > /dev/servoblaster';
         calistir(command);
+    });
+
+    socket.on('camStatus', function (data) {
+        // console.log('leftThrottle: ' + data);
+        if (data == 'open')
+        {
+            command = 'mjpg_streamer -i "input_uvc.so -f 10 -y YUYV" -o "output_http.so  -p 8080  -w /usr/local/www"';
+            calistir(command);
+        }
+        else if (data == 'close')
+        {
+            command = 'mjpg-streamer stop';
+            calistir(command);
+        }
     });
 
 
