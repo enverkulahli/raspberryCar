@@ -21,7 +21,7 @@ pins = [23, 24, 25, 10, 9, 11];
 var servoKucuk=50;
 var servoBuyuk = 250;
 
-var camStatus = 'closed';
+var camStatusVal = 'closed';
 
 // Enable sending signals to the car's remote control
 // which is connected to the Raspberry Pi.
@@ -41,6 +41,7 @@ io.sockets.on('connection', function (socket) {
     console.log('baglanti oldu galiba');
 
     //command = 'mjpg_streamer -i "input_uvc.so -f 10 -y YUYV" -o "output_http.so  -p 8080  -w /usr/local/www"';
+
     // calistir(command);
     // Listen for direction messages from the app.
     socket.on('ping', function (data) {
@@ -61,16 +62,18 @@ io.sockets.on('connection', function (socket) {
             command = 'echo 1 > ' + path + 'gpio24/value';
             calistir(command);
         }
-        else if (data > 0.5) {
+        else if (data > 0.5)
+        {
             //console.log('ileri ');
                 command = 'echo 1 > ' + path + 'gpio23/value';
                 calistir(command);
 
                 command = 'echo 1 > ' + path + 'gpio25/value';
                 calistir(command);
-            }
-            else {
-                //console.log('dur ');
+        }
+        else
+        {
+            //console.log('dur ');
                 command = 'echo 0 > ' + path + 'gpio23/value';
                 calistir(command);
 
@@ -129,26 +132,26 @@ io.sockets.on('connection', function (socket) {
     });
 
 
+    socket.on('camStatus', function (data) {
+        //console.log('camstatus: ' + data);
+        if (data == 'open' && camStatusVal=='closed')
+        {
+            //console.log('kamerayı açıyorum');
+            command = 'mjpg_streamer -i "input_uvc.so -f 10 -y YUYV" -o "output_http.so  -p 8080  -w /usr/local/www"';
+            calistir(command);
+            camStatusVal = 'opened';
+            socket.emit('camStatusGeri', 'opened');
+        }
+        else if (data == 'close' && camStatusVal=='opened')
+        {
+            //console.log('kamerayı kapatıyorum');
+            command = 'killall mjpg_streamer';
+            calistir(command);
+            camStatusVal = 'closed';
+            socket.emit('camStatusGeri', 'closed');
+        }
+    });
 
-    
-        socket.on('camStatus', function (data) {
-            // console.log('leftThrottle: ' + data);
-            if (data == 'open' && camStatus=='closed')
-            {
-                command = 'mjpg_streamer -i "input_uvc.so -f 10 -y YUYV" -o "output_http.so  -p 8080  -w /usr/local/www"';
-                calistir(command);
-                camStatus = 'opened';
-                socket.emit('camStatus', 'opened');
-            }
-            else if (data == 'close' && camStatus=='opened')
-            {
-                command = 'mjpg_streamer stop';
-                calistir(command);
-                camStatus = 'closed';
-                socket.emit('camStatus', 'closed');
-            }
-        });
-    
 
 })
 
@@ -176,23 +179,23 @@ function initPins() {
             else
                 console.log('Error when creating port: ' + error + ' (' + stderr + ').')
         })
-    }
+        }
 
     // Configure the Raspberry Pi's gpio pins as output ports which enables signals
     // to be sent to the car's remote control.
     // Read more at http://elinux.org/RPi_Low-level_peripherals#Bash_shell_script.2C_using_sysfs.2C_part_of_the_raspbian_operating_system
-    for (var pin in pins) {
-        console.log('Configuring port ' + pins[pin] + '...')
+        for (var pin in pins) {
+            console.log('Configuring port ' + pins[pin] + '...')
 
-        // The command configures the pin as an output port.
-        var command = 'echo out > ' + path + 'gpio' + pins[pin] + '/direction'
+            // The command configures the pin as an output port.
+            var command = 'echo out > ' + path + 'gpio' + pins[pin] + '/direction'
 
-        // Configure the ports using Raspbian's command line.
-        exec(command, function (error, stdout, stderr) {
-            if (error === null)
-                console.log('Successfully configured pin.')
-            else
-                console.log('Error when configuring port: ' + error + ' (' + stderr + ').')
-        })
-    }
+            // Configure the ports using Raspbian's command line.
+            exec(command, function (error, stdout, stderr) {
+                if (error === null)
+                    console.log('Successfully configured pin.')
+                else
+                    console.log('Error when configuring port: ' + error + ' (' + stderr + ').')
+            })
+        }
 }

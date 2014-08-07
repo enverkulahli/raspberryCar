@@ -8,7 +8,6 @@ var oncekiLeftThrottle = 0.5;
 var oncekiRightThrottle = 0.5;
 var oncekiPitchServo = 0.5;
 var oncekiYawServo = 0.5;
-var camStatus = 'closed';
 
 
     $(function () {
@@ -126,21 +125,17 @@ var camStatus = 'closed';
 
 	            });
 
-        //kamera ac/kapat sonrasında butondan yapılacak
-        try {
-            socket.emit('camStatus', 'open');
-            //socket.emit('camStatus', 'close');
-        } catch (error) {
-            console.log(error);
-        }
 
-        socket.on('camStatus', function (data) {
+
+        socket.on('camStatusGeri', function (data) {
+            console.log('karsidan veri geldi')
             if (data == 'opened')
             {
                 $('#camStatusValue').html('opened');
                 camStatus = 'opened';
                 //imgyi yenile
-                $('#streamViewer').attr('src','http://192.168.2.6:8080/?action=stream');
+                setTimeout(function () { $('#streamViewer').attr('src', 'http://192.168.2.6:8080/?action=stream'); }, 2000);
+               
             }
             else if (data == 'closed')
             {
@@ -240,22 +235,22 @@ function saveSnapshot() {
 
 function openCam()
 {
-    if (camStatus == 'closed') {
         try {
+            console.log('ac dedim')
             socket.emit('camStatus', 'open');
         } catch (error) {
             console.log(error);
         }
-    }
+   
 }
 function closeCam() {
-    if (camStatus == 'opened') {
         try {
+            console.log('kapa dedim')
             socket.emit('camStatus', 'close');
         } catch (error) {
             console.log(error);
         }
-    }
+   
 }
 
 
