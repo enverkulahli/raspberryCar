@@ -138,14 +138,12 @@ io.sockets.on('connection', function (socket) {
                 command = 'mjpg_streamer -i "input_uvc.so -f 10 -y YUYV" -o "output_http.so  -p 8080  -w /usr/local/www"';
                 calistir(command);
                 camStatus = 'opened';
-                socket.emit('camStatus', 'opened');
             }
             else if (data == 'close' && camStatus=='opened')
             {
-                command = 'mjpg_streamer stop';
+                command = 'mjpg-streamer stop';
                 calistir(command);
                 camStatus = 'closed';
-                socket.emit('camStatus', 'closed');
             }
         });
     
@@ -154,8 +152,8 @@ io.sockets.on('connection', function (socket) {
 
 function initPins() {
     //kamerayı calistir
-    //command = 'mjpg_streamer -i "input_uvc.so -f 10 -y YUYV" -o "output_http.so  -p 8080  -w /usr/local/www"';
-    //calistir(command);
+    command = 'mjpg_streamer -i "input_uvc.so -f 10 -y YUYV" -o "output_http.so  -p 8080  -w /usr/local/www"';
+    calistir(command);
     command='sudo /usr/local/sbin/servod  --p1pins=7,11,0,0,0,0,0,0'
     calistir(command);
 

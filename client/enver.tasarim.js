@@ -8,6 +8,7 @@ var oncekiLeftThrottle = 0.5;
 var oncekiRightThrottle = 0.5;
 var oncekiPitchServo = 0.5;
 var oncekiYawServo = 0.5;
+var camStatus = 'closed';
 
 
     $(function () {
@@ -133,6 +134,22 @@ var oncekiYawServo = 0.5;
             console.log(error);
         }
 
+        socket.on('camStatus', function (data) {
+            if (data == 'opened')
+            {
+                $('#camStatusValue').html('opened');
+                camStatus = 'opened';
+                //imgyi yenile
+                $('#streamViewer').attr('src','http://192.168.2.6:8080/?action=stream');
+            }
+            else if (data == 'closed')
+            {
+                $('#camStatusValue').html('closed');
+                camStatus = 'closed';
+                $('#streamViewer').attr('src','no-photo.jpg');
+            }
+        });
+
 
 });
 
@@ -144,11 +161,11 @@ $(document).ready(function () {  //ilk çalıştığında fonksiyonu çalıştı
         // Connect to the server running on the Raspberry Pi.
      
         socket.on('connect', function () {
-            alert('connected');
+            $("#statusValue").html('connected');
             //hyper.log('connected!');
         })
     } catch (error) {
-        alert('Failed to connect to the Raspberry Pi!')
+        $("#statusValue").html('Failed to connect to the Raspberry Pi!');
     }
 });
 
@@ -219,6 +236,26 @@ function SaveToDisk(fileURL, fileName) {
 }
 function saveSnapshot() {
     SaveToDisk('http://192.168.2.6:8080/?action=snapshot', 'snapshots/image.png');
+}
+
+function openCam()
+{
+    if (camStatus == 'closed') {
+        try {
+            socket.emit('camStatus', 'open');
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
+function closeCam() {
+    if (camStatus == 'opened') {
+        try {
+            socket.emit('camStatus', 'close');
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }
 
 

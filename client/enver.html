@@ -19,12 +19,14 @@
 
     <div id="endis">
         <div id="aciklamalar">
+            <div id="content">Status: <span id="statusValue"></span></div>
             <div id="content">LeftThrottle value: <span id="leftThrottleValue"></span></div>
             <div id="content">RightThrottle value: <span id="rightThrottleValue"></span></div>
             <div id="content">YawServo value: <span id="yawServoValue"></span> PitchServo value: <span id="pitchServoValue"></span></div>
+            <div id="content">cam Status: <span id="camStatusValue"></span></div>
         </div>
         <div id="butonlar">
-            <button onclick="saveSnapshot()">Snapshot</button>
+            <button onclick="saveSnapshot()">Snapshot</button><button onclick="openCam()">kamera Aç</button><button onclick="closeCam()">kamera Kapat</button>
         </div>
 
 
@@ -37,7 +39,7 @@
 
         <div id="orta">
             <div id="ortaust">
-                <img height="100%" src="http://192.168.2.6:8080/?action=stream" />
+                <img height="100%" src="http://192.168.2.6:8080/?action=stream" id="streamViewer" />
             </div>
             <div id="ortaalt">
                 <div class="joystick" id="camServo">
