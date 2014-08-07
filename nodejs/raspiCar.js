@@ -18,8 +18,9 @@ var path = '/sys/class/gpio/',
 	pins = [23, 24, 25, 10, 9, 11];
 //servo0=7=gpio4 servo1=11=gpio17 servo motorlar icin kullanılacak
 
-var servoKucuk=60;
-var servoBuyuk=240;
+var servoKucuk=50;
+var servoBuyuk = 250;
+
 
 // Enable sending signals to the car's remote control
 // which is connected to the Raspberry Pi.

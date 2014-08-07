@@ -5,7 +5,9 @@
 catch (error) { }
 
 var oncekiLeftThrottle = 0.5;
-var oncekiRightThrottle=0.5;
+var oncekiRightThrottle = 0.5;
+var oncekiPitchServo = 0.5;
+var oncekiYawServo = 0.5;
 
 
     $(function () {
@@ -43,7 +45,7 @@ var oncekiRightThrottle=0.5;
 	                if ((oncekiLeftThrottle <= 0.5 && $('#leftThrottle').joystick('value').y >= 0.5) || (oncekiLeftThrottle >= 0.5 && $('#leftThrottle').joystick('value').y <= 0.5))
 	                {
 	                    //veriyi gonder
-	                    //console.log('onceki: ' + oncekiLeftThrottle + '  simdiki: ' + $('#leftThrottle').joystick('value').y);
+	                    console.log('onceki: ' + oncekiLeftThrottle + '  simdiki: ' + $('#leftThrottle').joystick('value').y);
 	                    try {
 	                        socket.emit('leftThrottle', 0.5);
 	                        socket.emit('leftThrottle', $('#leftThrottle').joystick('value').y);
@@ -60,6 +62,7 @@ var oncekiRightThrottle=0.5;
 	                try {
 	                    socket.emit('leftThrottle', 0.5)
 	                    oncekiLeftThrottle = 0.5;
+	                    console.log('bitti');
 	                } catch (error) { }
 
 	            });
@@ -69,6 +72,7 @@ var oncekiRightThrottle=0.5;
 	                if ((oncekiRightThrottle <= 0.5 && $('#rightThrottle').joystick('value').y >= 0.5) || (oncekiRightThrottle >= 0.5 && $('#rightThrottle').joystick('value').y <= 0.5))
 	                {
 	                    //veriyi gonder
+	                    
 	                    try {
 	                        socket.emit('rightThrottle', 0.5);
 	                        socket.emit('rightThrottle', $('#rightThrottle').joystick('value').y);
@@ -94,12 +98,30 @@ var oncekiRightThrottle=0.5;
 	            $('#camServo').on('touchmove', function (e) {
 	                $("#yawServoValue").html($('#camServo').joystick('value').x);
 	                $("#pitchServoValue").html($('#camServo').joystick('value').y);
+	                //console.log($('#camServo').joystick('value').y + '    ' + oncekiPitchServo);
+	                if ((oncekiPitchServo > $('#camServo').joystick('value').y + 0.2) || (oncekiPitchServo < $('#camServo').joystick('value').y - 0.2))
+	                {
+	                    try {
+	                        socket.emit('pitchServo', $('#camServo').joystick('value').y);
+	                        oncekiPitchServo = $('#camServo').joystick('value').y;
+	                    } catch (error) {
+	                            console.log(error);
+                        }
+	                }
+	                if ((oncekiYawServo > $('#camServo').joystick('value').x + 0.2) || (oncekiYawServo < $('#camServo').joystick('value').x - 0.2)) {
 	                    try {
 	                        socket.emit('yawServo', $('#camServo').joystick('value').x);
-	                        socket.emit('pitchServo', $('#camServo').joystick('value').y);
+	                        oncekiYawServo = $('#camServo').joystick('value').x;
 	                    } catch (error) {
 	                        console.log(error);
 	                    }
+	                }
+	                    //try {
+	                    //    socket.emit('yawServo', $('#camServo').joystick('value').x);
+	                    //    socket.emit('pitchServo', $('#camServo').joystick('value').y);
+	                    //} catch (error) {
+	                    //    console.log(error);
+	                    //}
 
 	            });
 
@@ -171,6 +193,32 @@ function boyutlandir() {
     $('#camServo').joystick('value', x1, y1);
 
 
+}
+
+function SaveToDisk(fileURL, fileName) {
+    // for non-IE
+    if (!window.ActiveXObject) {
+        var save = document.createElement('a');
+        save.href = fileURL;
+        save.target = '_blank';
+        save.download = fileName || 'unknown';
+
+        var event = document.createEvent('Event');
+        event.initEvent('click', true, true);
+        save.dispatchEvent(event);
+        (window.URL || window.webkitURL).revokeObjectURL(save.href);
+    }
+
+        // for IE
+    else if (!!window.ActiveXObject && document.execCommand) {
+        var _window = window.open(fileURL, '_blank');
+        _window.document.close();
+        _window.document.execCommand('SaveAs', true, fileName || fileURL)
+        _window.close();
+    }
+}
+function saveSnapshot() {
+    SaveToDisk('http://192.168.2.6:8080/?action=snapshot', 'snapshots/image.png');
 }
 
 
